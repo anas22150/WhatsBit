@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Get project files
         uses: actions/checkout@v4
@@ -19,15 +20,13 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      - name: Install Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
       - name: Build APK
-        run: |
-          if [ -f gradlew ]; then
-            chmod +x gradlew
-            ./gradlew assembleDebug
-          else
-            echo "Android project files are missing"
-            exit 1
-          fi
+        run: gradle assembleDebug
 
       - name: Save APK
         uses: actions/upload-artifact@v4
